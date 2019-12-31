@@ -1,0 +1,44 @@
+Local OS: Ubuntu 18.04 LTS
+Local processor: 3.1 GHz Intel Core i5-7267U
+                 1 core in VM 
+Local RAM: 8 GB 2133 MHz LPDDR3
+
+Server OS: CentOS Linux 7
+Server processor: Intel(R) Xeon(R) CPU E5-2630 v3 @ 2.40GHz
+                  8 cores
+Server RAM: 64151kb (64 GB)
+
+LOCAL: 
++------------+-----------------+-----------------+----------------+
+| Processes  | Test 1  speedup | Test 2  speedup | Test 3 speedup |
++------------+-----------------+-----------------+----------------+
+|          1 | 12.34     1     | 12.41     1     |  12.28   1     |
+|          4 | 12.60     0.98  | 12.18     1.02  |  12.36   0.99  |
+|          8 | 11.86     1.04  | 13.42     0.93  |  12.77   1.04  |
++------------+-----------------+-----------------+----------------+
+
+SERVER: 
++------------+-----------------+-----------------+----------------+
+| Processes  | Test 1  speedup | Test 2  speedup | Test 3 speedup |
++------------+-----------------+-----------------+----------------+
+|          1 | 15.61     1     | 16.50     1     |  16.84   1     |
+|          4 | 9.14      1.71  | 6.76      2.44  |  8.12    2.07  |
+|          8 | 5.49      2.84  | 7.79      2.11  |  5.62    3.00  |
++------------+-----------------+-----------------+----------------+
+
+The logical explanation for the lack of speedup on the local machine is
+that the VirtualBox virtual machine was only allocated one core of the
+processor, so there was no way that parallel speedup could occur. Parallel
+speedup can only occur in the case that there are more than one processor on
+which to run the processes in parallel, otherwise the processes are run 
+sequentially like they would without forking processes anyway. The program 
+did see significant speedup on the server, as the server has 8 cores available. 
+The speedup was not N, however, which can be attributed to factors like heavy use
+of server by other students during time of testing, which can contribute to latency.
+
+Both Amdahl's Law and Gustafson's Law support that sample sort is a good parallel
+sorting algorithm. Amdahl's law indicates that the more processors available for 
+parallelization, the less significant the speedup, but in this case with a small 
+number of processors (<= 8), and a large portion of the executed code benefiting
+from parallelization (Gustafson's Law), there is a significant speedup in the
+runtime, which should be close to N.
